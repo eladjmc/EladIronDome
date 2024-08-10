@@ -1,0 +1,75 @@
+﻿@model IEnumerable<EladIronDome.Models.Threat>
+
+@{
+    ViewData["Title"] = "ThreatManagment";
+}
+
+<h1>Threat Managment</h1>
+
+<p>
+    <a asp-action="CreateThreat">Create New Threat</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Active
+            </th>
+            <th>
+                Amount of Threat
+            </th>
+            <th>
+                Type of Threat
+            </th>
+            <th>
+                Source of Threat
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @if (item.Status == EladIronDome.Utils.THREAT_STATUS.Active)
+                    {
+                        <span>Yes</span>
+                    }
+                    else
+                    {
+                        <span>No</span>
+                    }
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ThreatAmount)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Type.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Org.Name)
+                </td>
+                <td>
+                    @if (item.Status != EladIronDome.Utils.THREAT_STATUS.Active)
+                    {
+                        <div class="d-flex gap-3">
+                        @Html.ActionLink("Launch", "LaunchThreat", new { id = item.id })
+                        @Html.ActionLink("Update", "LaunchUpdate", new { id = item.id })
+                        @Html.ActionLink("Delete", "Delete", new { id = item.id })
+                        </div>
+                    }
+                    else
+                    {
+
+                        <div class="d-flex gap-3">
+                        <span class="text-danger m-2">Launch</span>
+                        <span class="text-danger">Update</span>
+                        <span class="text-danger">Delete</span>
+                        </div>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
