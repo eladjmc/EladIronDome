@@ -54,18 +54,19 @@
                     @if (item.Status != EladIronDome.Utils.THREAT_STATUS.Active)
                     {
                         <div class="d-flex gap-3">
-                        @Html.ActionLink("Launch", "LaunchThreat", new { id = item.id })
-                        @Html.ActionLink("Update", "LaunchUpdate", new { id = item.id })
-                        @Html.ActionLink("Delete", "LaunchDelete", new { id = item.id })
+                            @Html.ActionLink("Launch", "LaunchThreat", new { attackId = item.id })
+                            @Html.ActionLink("Update", "LaunchUpdate", new { id = item.id })
+                            @Html.ActionLink("Delete", "LaunchDelete", new { id = item.id })
                         </div>
                     }
                     else
                     {
 
                         <div class="d-flex gap-3">
-                        <span class="text-danger m-2">Launch</span>
-                        <span class="text-danger">Update</span>
-                        <span class="text-danger">Delete</span>
+                            <span class="btn btn-danger">Launch</span>
+                            <span class="btn btn-danger">Update</span>
+                            <span class="btn btn-danger">Delete</span>
+                            @Html.ActionLink("Cancel Attack", "CancelAttack", new { id = item.id })
                         </div>
                     }
                 </td>

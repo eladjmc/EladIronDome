@@ -17,11 +17,11 @@ namespace EladIronDome.Models
         public int id { get; set; }
 
         [NotMapped]
-        public int ResponseTime
+        public double ResponseTime
         {
             get
             {
-                return (Org.Distance / Type.Speed) * 3600;
+                return ((double)Org.Distance / Type.Speed) * 3600;
             }
         }
 
@@ -35,5 +35,7 @@ namespace EladIronDome.Models
 
         public DateTime? FiredAt { get; set; }
 
-    }
+		public string? ActiveID { get; set; }
+
+	}
 }
