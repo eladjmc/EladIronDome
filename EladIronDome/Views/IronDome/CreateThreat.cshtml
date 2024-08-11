@@ -1,0 +1,40 @@
+﻿@model EladIronDome.ViewModels.ThreatViewModel
+
+@{
+	ViewData["Title"] = "createThreat";
+}
+
+<h1>Create Threat</h1>
+
+<hr />
+<div class="row">
+	<div class="col-md-4">
+		<form asp-action="CreateThreat">
+			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+			<div class="form-group">
+				<label asp-for="TerrorOrgId" class="control-label"></label>
+				<select asp-for="TerrorOrgId" class="form-control" asp-items="Model.TerrorOrgs"> </select>
+				<span asp-validation-for="TerrorOrgId" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="TypeId" class="control-label"></label>
+				<select asp-for="TypeId" class="form-control" asp-items="Model.Types"></select>
+				<span asp-validation-for="TerrorOrgId" class="text-danger"></span>
+			</div>
+
+			<div class="form-group mt-5">
+				<input type="submit" value="Create Threat" class="btn btn-danger" />
+			</div>
+		</form>
+	</div>
+</div>
+
+<div>
+	<a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+	@{
+		await Html.RenderPartialAsync("_ValidationScriptsPartial");
+	}
+}

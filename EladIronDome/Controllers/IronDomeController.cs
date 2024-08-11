@@ -1,9 +1,13 @@
 ﻿using EladIronDome.Contexts;
 using EladIronDome.Models;
+using EladIronDome.Utils;
+using EladIronDome.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Concurrent;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace EladIronDome.Controllers
 {
@@ -63,9 +67,66 @@ namespace EladIronDome.Controllers
 
         public IActionResult ThreatManagment()
         {
-            
-            List<Threat> threats = _context.Threats.Include((t)=>t.Org).Include(t=>t.Type).ToList();
+
+            List<Threat> threats = _context.Threats.Include((t) => t.Org).Include(t => t.Type).ToList();
             return View(threats);
         }
-    }
+
+        public IActionResult CreateThreat()
+        {
+
+            ThreatViewModel tvm = new ThreatViewModel
+            {
+                Types = _context.ThreatAmmunitions.ToList()
+         .Select(ta => new SelectListItem { Value = ta.Id.ToString(), Text = ta.Name }).ToList(),
+                TerrorOrgs = _context.TerrorOrgs.ToList()
+         .Select(ta => new SelectListItem { Value = ta.Id.ToString(), Text = ta.Name }).ToList(),
+            };
+            return View(tvm);
+        }
+
+		[HttpPost, ValidateAntiForgeryToken]
+		public IActionResult CreateThreat([FromForm]ThreatViewModel tvm)
+		{
+
+			TerrorOrg? to = _context.TerrorOrgs.Find(tvm.TerrorOrgId);
+			ThreatAmmunition? ta = _context.ThreatAmmunitions.Find(tvm.TypeId);
+
+			if (to == null || ta == null)
+			{
+				return NotFound();
+			}
+			Threat t = new Threat
+			{
+				Org = to,
+				Type = ta
+			};
+
+			_context.Threats.Add(t);
+			_context.SaveChanges();
+
+			return RedirectToAction(nameof(ThreatManagment));
+		}
+
+		public IActionResult LaunchDelete(int id)
+		{
+			// Find the threat by ID
+			var threat = _context.Threats.Find(id);
+
+			if (threat == null || threat.Status == THREAT_STATUS.Active)
+			{
+				// If the threat doesn't exist, return a 404 Not Found
+				return NotFound();
+			}
+
+			// Remove the threat from the database
+			_context.Threats.Remove(threat);
+
+			// Save the changes
+			_context.SaveChanges();
+
+			// Redirect back to the management page
+			return RedirectToAction(nameof(ThreatManagment));
+		}
+	}
 }
